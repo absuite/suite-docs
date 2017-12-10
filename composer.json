@@ -1,0 +1,29 @@
+{
+  "name": "absuite/suite-docs",
+  "description": "suite Docs model for laravel5",
+  "license": "MIT",
+  "authors": [
+  {
+    "name": "absuite",
+    "email": "absuite@qq.com"
+  }],
+  "minimum-stability": "dev",
+  "require":
+  {},
+  "extra":
+  {
+    "laravel":
+    {
+      "providers": [
+        "Suite\\Docs\\ServiceProvider"
+      ]
+    }
+  },
+  "autoload":
+  {
+    "psr-4":
+    {
+      "Suite\\Docs\\": "src/"
+    }
+  }
+}
