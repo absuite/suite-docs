@@ -19,7 +19,8 @@ class CreateSuiteDocsProductsTable extends Migration {
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->string('code')->nullable()->comment('编码');
 		$md->string('title')->nullable()->comment('名称');
-
+		$md->string('cover')->nullable()->comment('图标');
+		$md->text('summary')->nullable()->comment('名称');
 		$md->boolean('is_revoked')->default(0)->comment('撤销');
 		$md->timestamps();
 

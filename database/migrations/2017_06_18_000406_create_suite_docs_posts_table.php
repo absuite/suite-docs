@@ -23,10 +23,6 @@ class CreateSuiteDocsPostsTable extends Migration {
 		$md->longText('content')->nullable()->comment('内容');
 		$md->string('keywords', 500)->nullable()->comment('关键字');
 
-		$md->integer('total_views')->default(0)->comment('浏览数');
-		$md->integer('total_favorites')->default(0)->comment('收藏数');
-		$md->integer('total_comments')->default(0)->comment('评论数');
-
 		$md->boolean('is_revoked')->default(0)->comment('撤销');
 		$md->timestamps();
 

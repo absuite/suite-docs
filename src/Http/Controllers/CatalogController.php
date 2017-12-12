@@ -6,10 +6,10 @@ use Gmf\Sys\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Suite\Docs\Models;
 
-class PostController extends Controller {
+class CatalogController extends Controller {
 	public function index(Request $request) {
 		$size = $request->input('size', 5);
-		$query = Models\Post::where('is_revoked', '0');
+		$query = Models\Catalog::where('is_revoked', '0');
 		$query->where('ent_id', $request->oauth_ent_id);
 
 		$query->orderBy('created_at', 'desc');
@@ -18,7 +18,7 @@ class PostController extends Controller {
 		return $this->toJson($data);
 	}
 	public function show(Request $request, string $id) {
-		$query = Models\Post::where('is_revoked', '0');
+		$query = Models\Catalog::where('is_revoked', '0');
 		$data = $query->where('id', $id)->first();
 		return $this->toJson($data);
 	}

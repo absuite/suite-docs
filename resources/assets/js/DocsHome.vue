@@ -27,37 +27,7 @@ export default {
   },
   data: () => ({
     loading: false,
-    mainDatas: [{
-      id: 1,
-      cover: '/img/vendor/suite-docs/cover/1.png',
-      title: '阿米巴巴套件实施手册',
-      summary: '这是一本旨在帮助你成功实施阿米巴巴套件的手册'
-    }, {
-      id: 2,
-      cover: '/img/vendor/suite-docs/cover/2.png',
-      title: '阿米巴巴套件帮助文档',
-      summary: '想获得更多相关信息，请参阅帮助文档!'
-    }, {
-      id: 3,
-      cover: '/img/vendor/suite-docs/cover/3.png',
-      title: '阿米巴巴套件接口开发手册',
-      summary: '介绍第三方接口如何快速与套件集成，定制接口'
-    }, {
-      id: 4,
-      cover: '/img/vendor/suite-docs/cover/4.png',
-      title: '阿米巴巴套件API说明',
-      summary: '详细描述套件API信息'
-    }, {
-      id: 5,
-      cover: '/img/vendor/suite-docs/cover/5.png',
-      title: '阿米巴巴套件速查表',
-      summary: '阿米巴巴套件实体信息查询'
-    }, {
-      id: 6,
-      cover: '/img/vendor/suite-docs/cover/6.png',
-      title: '阿米巴巴套件开发手册',
-      summary: '阿米巴巴套件实体信息查询'
-    }]
+    mainDatas: []
   }),
   computed: {
 
@@ -66,11 +36,17 @@ export default {
     goProduct(item) {
       if (item && item.id)
         this.$go({ name: 'docs.product', params: { product: item.id } });
+    },
+    fetchMainDatas() {
+      this.$http.get('docs/products').then(response => {
+        this.mainDatas = response.data.data;
+      }).catch(err => {
+        this.$toast(err);
+      });
     }
   },
-  created() {},
   mounted() {
-
+    this.fetchMainDatas();
   }
 }
 </script>
