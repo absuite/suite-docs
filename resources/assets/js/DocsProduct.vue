@@ -32,10 +32,10 @@
                 </div>
                 <span class="flex"></span>
                 <div class="md-toolbar-section-end">
-                  <md-button class="md-icon-button" @click="onItemEdit">
+                  <md-button class="md-icon-button" @click="onItemEdit" :disabled="!mainPost.id">
                     <md-icon>edit</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button" @click="onItemRemove">
+                  <md-button class="md-icon-button" @click="onItemRemove" :disabled="!mainPost.id">
                     <md-icon>clear</md-icon>
                   </md-button>
                 </div>
@@ -60,8 +60,8 @@ export default {
   data: () => ({
     loading: false,
     navs: [],
-    mainProduct:{},
-    mainPost:{}
+    mainProduct: {},
+    mainPost: {}
   }),
   watch: {
     '$route.params.id' (to, from) {
@@ -85,42 +85,48 @@ export default {
         id: this.$route.params.id
       });
     },
-    onItemRemove() {
-      if(this.$route.params.id){
-        this.$http.delete('docs/posts/'+this.$route.params.id).then(response => {
-          this.fetchNavDatas();
-          this.$go({name:'docs.product',params:{product:mainProduct.id}});
-        }).catch(err => {
+    async onItemRemove() {
+      if (this.$route.params.id) {
+        try {
+          await this.$http.delete('docs/posts/' + this.$route.params.id);
+          await this.fetchNavDatas();
+          this.$go({ name: 'docs.product', params: { product: mainProduct.id } });
+        } catch (err) {
           this.$toast(err);
-        });
+        }
       }
     },
-    fetchNavDatas() {
-      this.$http.get('docs/posts/catalogs', { params: { product: this.$route.params.product } }).then(response => {
+    async fetchNavDatas() {
+      try {
+        const response = await this.$http.get('docs/posts/catalogs', { params: { product: this.$route.params.product } });
         this.navs = response.data.data;
-      }).catch(err => {
+      } catch (err) {
         this.$toast(err);
-      });
+      }
+
     },
-    fetchPostData() {
-      if(!this.$route.params.id)return;
-      this.$http.get('docs/posts/'+this.$route.params.id).then(response => {
+    async fetchPostData() {
+      if (!this.$route.params.id) return;
+      try {
+        const response = await this.$http.get('docs/posts/' + this.$route.params.id);
+
         this.mainPost = response.data.data;
-      }).catch(err => {
+      } catch (err) {
         this.$toast(err);
-      });
+      }
     },
-    fetchProductData() {
-      if(!this.$route.params.product)return;
-      this.$http.get('docs/products/'+this.$route.params.product).then(response => {
+    async fetchProductData() {
+      if (!this.$route.params.product) return;
+      try {
+        const response = await this.$http.get('docs/products/' + this.$route.params.product);
+
         this.mainProduct = response.data.data;
-      }).catch(err => {
+      } catch (err) {
         this.$toast(err);
-      });
+      }
     },
   },
-  created() {
-  },
+  created() {},
   mounted() {
     window.setTimeout(() => {
       this.message = true
@@ -189,7 +195,7 @@ export default {
       font-size: 16px;
       line-height: 2em;
       &.router-link-active {
-        color:var(--md-theme-default-primary, #0f9d58);
+        color: var(--md-theme-default-primary, #0f9d58);
         font-weight: 500;
       }
     }
