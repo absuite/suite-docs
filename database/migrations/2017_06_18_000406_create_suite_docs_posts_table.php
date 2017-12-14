@@ -19,7 +19,12 @@ class CreateSuiteDocsPostsTable extends Migration {
 		$md->entity('ent', 'gmf.sys.ent')->nullable()->comment('企业');
 		$md->entity('user', 'gmf.sys.user')->nullable()->comment('用户');
 
-		$md->string('title')->comment('名称');
+		$md->entity('product', 'suite.docs.product')->nullable()->comment('产品');
+		$md->entity('root', 'suite.docs.post')->nullable()->comment('根');
+		$md->entity('parent', 'suite.docs.post')->nullable()->comment('上级节点');
+
+		$md->string('code')->nullable()->comment('编码');
+		$md->string('title')->nullable()->comment('名称');
 		$md->longText('content')->nullable()->comment('内容');
 		$md->string('keywords', 500)->nullable()->comment('关键字');
 

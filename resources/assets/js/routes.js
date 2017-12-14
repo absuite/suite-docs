@@ -4,14 +4,9 @@ const routeList = [{
     componentName: 'DocsHome'
   },
   {
-    path: '/docs/:product',
+    path: '/docs/:product/:id?',
     name: 'docs.product',
-    componentName: 'DocsProduct',
-    children: [{
-      path: ':id',
-      name: 'docs.product.show',
-      componentName: 'DocsProductShow'
-    }]
+    componentName: 'DocsProduct'
   },
 ];
 

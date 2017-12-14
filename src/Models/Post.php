@@ -11,7 +11,7 @@ class Post extends Model {
 	use Snapshotable, HasGuard;
 	protected $table = 'suite_docs_posts';
 	public $incrementing = false;
-	protected $fillable = ['id', 'ent_id', 'user_id', 'title', 'content', 'keywords', 'is_revoked'];
+	protected $fillable = ['id', 'ent_id', 'user_id', 'product_id', 'root_id', 'parent_id', 'code', 'title', 'content', 'keywords', 'is_revoked'];
 	public static function build(Closure $callback) {
 		tap(new Builder, function ($builder) use ($callback) {
 			$callback($builder);

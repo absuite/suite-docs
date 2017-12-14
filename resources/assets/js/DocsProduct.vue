@@ -5,37 +5,37 @@
       <div class="main-nav-container">
         <transition name="nav" appear>
           <md-content class="main-nav layout lauout-column">
+            <md-toolbar md-elevation="1">
+              <router-link :to="{name:'docs.product',params:{product:mainProduct.id}}">{{mainProduct.title}}</router-link>
+            </md-toolbar>
             <div class="flex nav-list md-scrollbar">
               <template v-for="item in navs">
-                <router-link :to="{name:'docs.product.show',params:{id:item.id}}">{{navs.title}}</router-link>
-                <div class="main-nav-level" v-if="item.nodes&& item.nodes.length">
-                  <template v-for="s in item.nodes">
-                    <router-link :to="{name:'docs.product.show',params:{id:s.id}}">{{ s.title}}</router-link>
-                    <div class="main-nav-level" v-if="s.nodes&& s.nodes.length">
-                      <template v-for="ss in s.nodes">
-                        <router-link :to="{name:'docs.product.show',params:{id:ss.id}}">{{ ss.title}}</router-link>
+                <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:item.id}}">{{item.title}}</router-link>
+                <div class="main-nav-level" v-if="item.childs&& item.childs.length">
+                  <template v-for="s in item.childs">
+                    <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:s.id}}">{{ s.title}}</router-link>
+                    <div class="main-nav-level" v-if="s.childs&& s.childs.length">
+                      <template v-for="ss in s.childs">
+                        <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:ss.id}}">{{ ss.title}}</router-link>
                       </template>
                     </div>
                   </template>
                 </div>
               </template>
             </div>
-            <md-toolbar>
+            <md-toolbar md-elevation="1">
               <div class="md-toolbar-row">
                 <div class="md-toolbar-section-start">
-                  <md-button class="md-icon-button">
+                  <md-button class="md-icon-button" @click="onItemAdd">
                     <md-icon>add</md-icon>
-                  </md-button>
-                  <md-button class="md-icon-button">
-                    <md-icon>send</md-icon>
                   </md-button>
                 </div>
                 <span class="flex"></span>
                 <div class="md-toolbar-section-end">
-                  <md-button class="md-icon-button">
+                  <md-button class="md-icon-button" @click="onItemEdit">
                     <md-icon>edit</md-icon>
                   </md-button>
-                  <md-button class="md-icon-button">
+                  <md-button class="md-icon-button" @click="onItemRemove">
                     <md-icon>clear</md-icon>
                   </md-button>
                 </div>
@@ -44,10 +44,10 @@
           </md-content>
         </transition>
       </div>
-      <div class="main-container" v-if="loading">
+      <div class="main-container" v-html="mainPost.content">
       </div>
-      <router-view v-else />
     </div>
+    <docs-post-edit ref="postEdit" @md-closed="fetchNavDatas"></docs-post-edit>
   </div>
 </template>
 <script>
@@ -59,39 +59,73 @@ export default {
   },
   data: () => ({
     loading: false,
-    message: false,
-    navs: []
+    navs: [],
+    mainProduct:{},
+    mainPost:{}
   }),
-  computed: {
-
+  watch: {
+    '$route.params.id' (to, from) {
+      this.fetchPostData();
+    },
+    '$route.params.product' (to, from) {
+      this.fetchProductData();
+      this.fetchNavDatas();
+    }
   },
   methods: {
-    closeMessage() {
-      this.message = false
+    onItemAdd() {
+      this.$refs.postEdit.open({
+        product_id: this.$route.params.product,
+        parent_id: this.$route.params.id
+      });
     },
-    beforeRouteRender(to, from, next) {
-      this.loading = true
-      next()
+    onItemEdit() {
+      this.$refs.postEdit.open({
+        product_id: this.$route.params.product,
+        id: this.$route.params.id
+      });
     },
-    afterRouteRender() {
-      this.loading = false
+    onItemRemove() {
+      if(this.$route.params.id){
+        this.$http.delete('docs/posts/'+this.$route.params.id).then(response => {
+          this.fetchNavDatas();
+          this.$go({name:'docs.product',params:{product:mainProduct.id}});
+        }).catch(err => {
+          this.$toast(err);
+        });
+      }
     },
     fetchNavDatas() {
-      this.$http.get('docs/catalogs',{params:{product:this.$route.params.product}}).then(response => {
+      this.$http.get('docs/posts/catalogs', { params: { product: this.$route.params.product } }).then(response => {
         this.navs = response.data.data;
+      }).catch(err => {
+        this.$toast(err);
+      });
+    },
+    fetchPostData() {
+      if(!this.$route.params.id)return;
+      this.$http.get('docs/posts/'+this.$route.params.id).then(response => {
+        this.mainPost = response.data.data;
+      }).catch(err => {
+        this.$toast(err);
+      });
+    },
+    fetchProductData() {
+      if(!this.$route.params.product)return;
+      this.$http.get('docs/products/'+this.$route.params.product).then(response => {
+        this.mainProduct = response.data.data;
       }).catch(err => {
         this.$toast(err);
       });
     },
   },
   created() {
-    this.$router.beforeEach(this.beforeRouteRender)
-    this.$router.afterEach(this.afterRouteRender)
   },
   mounted() {
     window.setTimeout(() => {
       this.message = true
     }, 2000);
+    this.fetchProductData();
     this.fetchNavDatas();
   }
 }
@@ -149,8 +183,18 @@ export default {
     overflow: auto;
     width: 100%;
 
+    a {
+      display: block;
+      color: inherit;
+      font-size: 16px;
+      line-height: 2em;
+      &.router-link-active {
+        color:var(--md-theme-default-primary, #0f9d58);
+        font-weight: 500;
+      }
+    }
+
     .main-nav-level {
-      margin-bottom: 16px;
       margin-left: 20px;
     }
   }
@@ -175,5 +219,6 @@ export default {
 
 .main-container {
   flex: 1;
+  padding: 10px;
 }
 </style>

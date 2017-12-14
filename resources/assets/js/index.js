@@ -3,9 +3,9 @@ import components from './components';
 import config from 'gmf/config';
 import routes from './routes';
 
+
 import DocsHome from './DocsHome';
 import DocsProduct from './DocsProduct';
-import DocsProductShow from './pages/ProductShow';
 const options = {
   components,
 };
@@ -19,7 +19,6 @@ options.install = (Vue) => {
 
   Vue.component(DocsHome.name, DocsHome);
   Vue.component(DocsProduct.name, DocsProduct);
-  Vue.component(DocsProductShow.name, DocsProductShow);
 
   for (let component in options) {
     const componentInstaller = options[component];
