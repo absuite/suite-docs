@@ -44,7 +44,16 @@
           </md-content>
         </transition>
       </div>
-      <div class="main-container" v-html="mainPost.content">
+      <div class="main-container">
+        <md-card class="md-elevation-0 ql-snow" v-if="mainPost&&mainPost.id">
+          <md-card-header>
+            <div class="md-title">{{ mainPost.title }}</div>
+          </md-card-header>
+          <md-divider></md-divider>
+          <md-card-content class="ql-editor">
+            <div v-html="mainPost.content"></div>
+          </md-card-content>
+        </md-card>
       </div>
     </div>
     <docs-post-edit ref="postEdit" @md-closed="fetchNavDatas"></docs-post-edit>
@@ -133,6 +142,7 @@ export default {
     }, 2000);
     this.fetchProductData();
     this.fetchNavDatas();
+    this.fetchPostData();
   }
 }
 </script>
@@ -226,5 +236,10 @@ export default {
 .main-container {
   flex: 1;
   padding: 10px;
+  >.md-card {
+    margin: 0 auto;
+    max-width: 890px;
+  }
+  blockquote {}
 }
 </style>
