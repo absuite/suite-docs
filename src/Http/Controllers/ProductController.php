@@ -10,7 +10,7 @@ class ProductController extends Controller {
 	public function index(Request $request) {
 		$size = $request->input('size', 15);
 		$query = Models\Product::where('is_revoked', '0');
-		$query->where('ent_id', $request->oauth_ent_id);
+		//$query->where('ent_id', GAuth::entId());
 		$query->orderBy('created_at', 'desc');
 
 		$data = $query->paginate($size);

@@ -1,70 +1,66 @@
 <template>
-  <div class="container">
-    <main-header />
-    <div class="container-wrapper md-layout-row">
-      <div class="main-nav-container">
-        <transition name="nav" appear>
-          <md-content class="main-nav layout lauout-column">
-            <md-toolbar md-elevation="1">
-              <router-link :to="{name:'docs.product',params:{product:mainProduct.id}}">{{mainProduct.title}}</router-link>
-            </md-toolbar>
-            <div class="flex nav-list md-scrollbar">
-              <template v-for="item in navs">
-                <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:item.id}}">{{item.title}}</router-link>
-                <div class="main-nav-level" v-if="item.childs&& item.childs.length">
-                  <template v-for="s in item.childs">
-                    <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:s.id}}">{{ s.title}}</router-link>
-                    <div class="main-nav-level" v-if="s.childs&& s.childs.length">
-                      <template v-for="ss in s.childs">
-                        <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:ss.id}}">{{ ss.title}}</router-link>
-                      </template>
-                    </div>
-                  </template>
-                </div>
-              </template>
-            </div>
-            <md-toolbar md-elevation="1">
-              <div class="md-toolbar-row">
-                <div class="md-toolbar-section-start">
-                  <md-button class="md-icon-button" @click="onItemAdd">
-                    <md-icon>add</md-icon>
-                  </md-button>
-                </div>
-                <span class="flex"></span>
-                <div class="md-toolbar-section-end">
-                  <md-button class="md-icon-button" @click="onItemEdit" :disabled="!mainPost.id">
-                    <md-icon>edit</md-icon>
-                  </md-button>
-                  <md-button class="md-icon-button" @click="onItemRemove" :disabled="!mainPost.id">
-                    <md-icon>clear</md-icon>
-                  </md-button>
-                </div>
+  <div class="container-wrapper md-layout-row">
+    <div class="main-nav-container">
+      <transition name="nav" appear>
+        <md-content class="main-nav layout lauout-column">
+          <md-toolbar md-elevation="1">
+            <router-link :to="{name:'docs.product',params:{product:mainProduct.id}}">{{mainProduct.title}}</router-link>
+          </md-toolbar>
+          <div class="flex nav-list md-scrollbar">
+            <template v-for="item in navs">
+              <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:item.id}}">{{item.title}}</router-link>
+              <div class="main-nav-level" v-if="item.childs&& item.childs.length">
+                <template v-for="s in item.childs">
+                  <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:s.id}}">{{ s.title}}</router-link>
+                  <div class="main-nav-level" v-if="s.childs&& s.childs.length">
+                    <template v-for="ss in s.childs">
+                      <router-link :to="{name:'docs.product',params:{product:mainProduct.id,id:ss.id}}">{{ ss.title}}</router-link>
+                    </template>
+                  </div>
+                </template>
               </div>
-            </md-toolbar>
-          </md-content>
-        </transition>
-      </div>
-      <div class="main-container">
-        <md-card class="md-elevation-0 ql-snow" v-if="mainPost&&mainPost.id">
-          <md-card-header>
-            <div class="md-title">{{ mainPost.title }}</div>
-          </md-card-header>
-          <md-divider></md-divider>
-          <md-card-content class="ql-editor">
-            <div v-html="mainPost.content"></div>
-          </md-card-content>
-        </md-card>
-      </div>
+            </template>
+          </div>
+          <md-toolbar md-elevation="1">
+            <div class="md-toolbar-row">
+              <div class="md-toolbar-section-start">
+                <md-button class="md-icon-button" @click="onItemAdd">
+                  <md-icon>add</md-icon>
+                </md-button>
+              </div>
+              <span class="flex"></span>
+              <div class="md-toolbar-section-end">
+                <md-button class="md-icon-button" @click="onItemEdit" :disabled="!mainPost.id">
+                  <md-icon>edit</md-icon>
+                </md-button>
+                <md-button class="md-icon-button" @click="onItemRemove" :disabled="!mainPost.id">
+                  <md-icon>clear</md-icon>
+                </md-button>
+              </div>
+            </div>
+          </md-toolbar>
+        </md-content>
+      </transition>
     </div>
-    <docs-post-edit ref="postEdit" @md-closed="fetchNavDatas"></docs-post-edit>
+    <div class="main-container">
+      <md-card class="md-elevation-0 ql-snow" v-if="mainPost&&mainPost.id">
+        <md-card-header>
+          <div class="md-title">{{ mainPost.title }}</div>
+        </md-card-header>
+        <md-divider></md-divider>
+        <md-card-content class="ql-editor">
+          <div v-html="mainPost.content"></div>
+        </md-card-content>
+      </md-card>
+    </div>
+    <post-edit ref="postEdit" @md-closed="fetchNavDatas"></post-edit>
   </div>
 </template>
 <script>
-import MainHeader from './template/MainHeader'
+import PostEdit from '../components/PostEdit'
 export default {
-  name: 'DocsProduct',
   components: {
-    MainHeader,
+    PostEdit,
   },
   data: () => ({
     loading: false,
@@ -149,22 +145,6 @@ export default {
 <style lang="scss" scoped>
 @import "~vue-material/components/MdAnimation/variables";
 @import "~vue-material/components/MdLayout/mixins";
-@import "~vue-material/theme/engine";
-.container {
-  min-height: 100%;
-  padding-top: 64px;
-  display: flex;
-  flex-direction: column;
-  transition: $md-transition-default;
-  transition-property: padding-top;
-  @include md-layout-small {
-    padding-top: 48px;
-  }
-  @include md-layout-xsmall {
-    padding-top: 56px;
-  }
-}
-
 .container-wrapper {
   flex: 1;
   padding-left: 270px;

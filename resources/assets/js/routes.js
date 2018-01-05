@@ -1,34 +1,24 @@
-const routeList = [{
-    path: '/docs',
+const routes = [{
+  path: '/docs',
+  name: 'docs',
+  component: () =>
+    import ('./App.vue'),
+  children: [{
+    path: 'home',
     name: 'docs.home',
-    componentName: 'DocsHome'
-  },
-  {
-    path: '/docs/:product/:id?',
+    component: () =>
+      import ('./pages/Home.vue'),
+  }, {
+    path: 'entity/:id?',
+    name: 'docs.entity',
+    component: () =>
+      import ('./pages/Entity.vue'),
+  }, {
+    path: 'product/:product/:id?',
     name: 'docs.product',
-    componentName: 'DocsProduct'
-  },
-];
-
-function getComponent(name) {
-  return {
-    template: '<md-wrap name="' + name + '"></md-wrap>'
-  };
-}
-const routes = routeList.map((route) => {
-  if (route.componentName) {
-    route.component = getComponent(route.componentName);
-  }
-
-  if (route.children && route.children.length > 0) {
-    route.children.map((r) => {
-      if (r.componentName) {
-        r.component = getComponent(r.componentName);
-      }
-      return r;
-    });
-  }
-  return route;
-});
+    component: () =>
+      import ('./pages/Product.vue'),
+  }]
+}];
 
 export default routes;
