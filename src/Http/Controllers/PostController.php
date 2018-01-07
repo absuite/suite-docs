@@ -2,6 +2,7 @@
 
 namespace Suite\Docs\Http\Controllers;
 
+use GAuth;
 use Gmf\Sys\Http\Controllers\Controller;
 use Gmf\Sys\Libs\TreeBuilder;
 use Illuminate\Http\Request;
@@ -12,7 +13,7 @@ class PostController extends Controller {
 	public function index(Request $request) {
 		$size = $request->input('size', 5);
 		$query = Models\Post::where('is_revoked', '0');
-		$query->where('ent_id', $request->oauth_ent_id);
+		$query->where('ent_id', GAuth::entId());
 
 		$query->orderBy('created_at', 'desc');
 
