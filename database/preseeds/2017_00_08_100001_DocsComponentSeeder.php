@@ -15,7 +15,7 @@ class DocsComponentSeeder extends Seeder {
 	public function run() {
 		$exception = DB::transaction(function () {
 			Models\Component::build(function (Builder $builder) {
-				$builder->code('docsPostShow')->name('文档信息');
+				$builder->code('docsPostShow')->type_enum('ui')->name('文档信息');
 			});
 		});
 	}
