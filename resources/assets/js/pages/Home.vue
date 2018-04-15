@@ -42,8 +42,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~vue-material/components/MdAnimation/variables";
-@import "~vue-material/components/MdLayout/mixins";
+@import "~gmf/components/MdAnimation/variables";
+@import "~gmf/components/MdLayout/mixins";
 
 .main-container {
   margin: 0 auto;
