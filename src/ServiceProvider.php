@@ -26,7 +26,7 @@ class ServiceProvider extends BaseServiceProvider {
 		}
 	}
 	public function alias() {
-		return 'suite-bec';
+		return 'suite-docs';
 	}
 	/**
 	 * Register the application services.
