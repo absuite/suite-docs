@@ -19,6 +19,9 @@ class DocsProductSeeder extends Seeder {
 		if (empty($this->entId)) {
 			return;
 		}
+		if (Models\Product::where('code', '!=', '')->count() > 0) {
+			return;
+		}
 
 		Models\Product::build(function (Builder $b) {
 			$b->ent_id($this->entId)->code('11')
